@@ -78,6 +78,7 @@ void Moje_Systick_Handle()
 
 int parsowanie_RGB(uint8_t* bufor)
 {
+	uint8_t check[14];
 	for(i=0;i<3;i++)
 	{
 		if(*bufor=='R')
@@ -115,9 +116,24 @@ int parsowanie_RGB(uint8_t* bufor)
 				}
 	}
 
+	for (i=1; i<3; i++)
+	{
+		bufor++;
+	}
 
-	return 1;
+	for (i = 13; i>0; i--)
+	{
+		check[i] = *bufor;
+		bufor--;
+	}
 
+
+	if((check[0] == 'R' ) && (check[4] == 'G' ) && (check[8] == 'B'))
+	{
+	return 1; // 1 oznacza sukces parsowania
+	}else{
+	return 2; // 2 oznacza błąd parsowania
+	}
 
 }
 
@@ -183,8 +199,36 @@ int main(void)
 
 		  }
 
-	  if(sukces==1){
+	  if(sukces==1)
+	  {
 		  	  	  	sukces=0;
+		  	  	  	// check if higher then 255
+		  	  	  	if (R > 255)
+		  	  	  	{
+		  	  	  		R = 255;
+		  	  	  	}
+		  	  	  	if (G > 255)
+		  	  	  	{
+		  	  	  		G = 255;
+		  	  	  	}
+		  	  	  	if (B > 255)
+		  	  	  	{
+		  	  	  		B = 255;
+		  	  	  	}
+		  	  	  	// Now check if smaller then 0
+		  	  	  	if (R < 0)
+		  	  	  	{
+		   	  	  		R = 0;
+		  	 	  	}
+		   	  	  	if (G < 0)
+		  	  	  	{
+		  	  	  		G = 0;
+		  	  		}
+		  	  		if (B < 0)
+		  	  		{
+		  	   	  		B = 0;
+		  	   	  	}
+
 		  	  	  	bufor_PWM1 = htim1.Instance->CCR1;
 		  	  	  	bufor_PWM2 = htim1.Instance->CCR2;
 		  	  	  	bufor_PWM3 = htim1.Instance->CCR3;
@@ -209,6 +253,14 @@ int main(void)
 		  	  	  	  	  	  		  _licznik_10ms = 0;
 		  	  	  	  	  	  	  }
 		  	  	  	  	  	  }
+	  }else if(sukces == 2)
+	  {
+		  HAL_Delay(5); // to make sure that any further incorrect data will be omitted
+		  licznik = 0;
+		  for(i=0; i<15; i++)
+		  {
+			  bufor[i] = 0;
+		  }
 	  }
 
 
