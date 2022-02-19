@@ -177,6 +177,9 @@ int main(void)
   HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_2);
   HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_3);
   HAL_UART_Receive_IT(&huart2, &znak, 1);
+  htim1.Instance->CCR1 = 100; // B
+  htim1.Instance->CCR2 = 30; // G
+  htim1.Instance->CCR3 = 10; // R
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -190,8 +193,12 @@ int main(void)
 	  {
 		  bufor[licznik]=znak;
 		  licznik++;
-
 		  flaga=0;
+	  }
+	  if((bufor[licznik-1] == '\n')&&(licznik != 14))
+	  {
+		  licznik = 0;
+		  sukces = 2; // signal that recieved frame was not valid
 	  }
 
 	  if(licznik==14){
@@ -254,6 +261,10 @@ int main(void)
 		  	  	  	  	  	  		  _licznik_10ms = 0;
 		  	  	  	  	  	  	  }
 		  	  	  	  	  	  }
+		  	  	  	  	 // in event of next frame being admitted while stepping
+		  	  	  	  	 	 znak = 0;
+		  	  	  			 flaga = 0;
+
 	  }else if(sukces == 2)
 	  {
 		  sukces = 0;

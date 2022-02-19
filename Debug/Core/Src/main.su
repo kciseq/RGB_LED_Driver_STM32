@@ -1,6 +1,6 @@
 main.c:66:6:Moje_Systick_Handle	4	static
 main.c:79:5:parsowanie_RGB	32	static
 main.c:149:5:main	8	static
-main.c:279:6:SystemClock_Config	72	static
-main.c:314:6:HAL_UART_RxCpltCallback	16	static
-main.c:327:6:Error_Handler	4	static
+main.c:290:6:SystemClock_Config	72	static
+main.c:325:6:HAL_UART_RxCpltCallback	16	static
+main.c:338:6:Error_Handler	4	static
