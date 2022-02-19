@@ -25,7 +25,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "Moje_Systick_Handle.h"
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -45,12 +45,12 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-uint8_t znak, flaga, licznik=0, komunikat[20],dl_kom,flaga2, flaga_stopniowanie,
+uint8_t znak, flaga, licznik=0, komunikat[20],dl_kom;
 bufor_PWM1,bufor_PWM2,bufor_PWM3,licznik_stopniowania;
 uint8_t bufor[15];
-uint8_t zparsowany[3], sukces, zparsowany1, zparsowany2, zparsowany3;
+uint8_t zparsowany[3], sukces;
 uint8_t R,G,B,i,j;
-unsigned int _licznik_10ms, _10ms_go;
+
 
 /* USER CODE END PV */
 
@@ -63,18 +63,7 @@ void SystemClock_Config(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 
-void Moje_Systick_Handle()
-{
-	if (flaga_stopniowanie == 1)
-		{
-			_licznik_10ms++;
-			if (_licznik_10ms >= 10)
-			{
-				_licznik_10ms = 0;
-				_10ms_go = 1;
-			}
-		}
-}
+
 
 int parsowanie_RGB(uint8_t* bufor)
 {
@@ -184,31 +173,10 @@ int main(void)
 		  }
 
 	  if(sukces==1){
-		  	  	  	sukces=0;
-		  	  	  	bufor_PWM1 = htim1.Instance->CCR1;
-		  	  	  	bufor_PWM2 = htim1.Instance->CCR2;
-		  	  	  	bufor_PWM3 = htim1.Instance->CCR3;
-		  	  	  	flaga_stopniowanie = 1;
-		  	  	  	  	 while(flaga_stopniowanie == 1)
-		  	  	  	  	  	  {
-		  	  	  	  	  	  if(_10ms_go == 1)
-		  	  	  	  	  	  {
-		  	  	  	  	  		  _10ms_go = 0;
-	 			  	  	  	  	  htim1.Instance->CCR1+=(B-bufor_PWM1)/10;
-	 			  	  	  	  	  htim1.Instance->CCR2+=(G-bufor_PWM2)/10;
-	 			  	  	  	  	  htim1.Instance->CCR3+=(R-bufor_PWM3)/10;
-	 			  	  	  	  	  licznik_stopniowania++;
-		  	  	  	  	  	  }
-		  	  	  	  	  	  	  if(licznik_stopniowania >=10)
-		  	  	  	  	  	  	  {
-		  	  	  	  	  	  		  htim1.Instance->CCR1=B;
-		  	  	  	  	  	  		  htim1.Instance->CCR2=G;
-		  	  	  	  	  	  		  htim1.Instance->CCR3=R;
-		  	  	  	  	  	  		  licznik_stopniowania =0;
-		  	  	  	  	  	  		  flaga_stopniowanie = 0;
-		  	  	  	  	  	  		  _licznik_10ms = 0;
-		  	  	  	  	  	  	  }
-		  	  	  	  	  	  }
+		  	  	  	  sukces=0;
+	 			  	  	  htim1.Instance->CCR1=B;
+	 			  			  htim1.Instance->CCR2=G;
+	 			  			  htim1.Instance->CCR3=R;
 	  }
 
 
