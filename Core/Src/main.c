@@ -46,7 +46,6 @@
 
 /* USER CODE BEGIN PV */
 uint8_t znak, flaga, licznik=0, komunikat[20],dl_kom;
-bufor_PWM1,bufor_PWM2,bufor_PWM3,licznik_stopniowania;
 uint8_t bufor[15];
 uint8_t zparsowany[3], sukces;
 uint8_t R,G,B,i,j;
