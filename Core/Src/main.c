@@ -116,7 +116,7 @@ int parsowanie_RGB(uint8_t* bufor)
 				}
 	}
 
-	for (i=1; i<3; i++)
+	for (i=1; i<2; i++)
 	{
 		bufor++;
 	}
@@ -126,6 +126,7 @@ int parsowanie_RGB(uint8_t* bufor)
 		check[i] = *bufor;
 		bufor--;
 	}
+	check[0] = *bufor;
 
 
 	if((check[0] == 'R' ) && (check[4] == 'G' ) && (check[8] == 'B'))
@@ -255,12 +256,15 @@ int main(void)
 		  	  	  	  	  	  }
 	  }else if(sukces == 2)
 	  {
+		  sukces = 0;
 		  HAL_Delay(5); // to make sure that any further incorrect data will be omitted
 		  licznik = 0;
 		  for(i=0; i<15; i++)
 		  {
 			  bufor[i] = 0;
 		  }
+		  znak = 0;
+		  flaga = 0;
 	  }
 
 
