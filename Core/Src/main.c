@@ -45,9 +45,9 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-uint8_t znak, flaga, licznik=0, komunikat[20],dl_kom,flaga2, flaga_stopniowanie,
+uint8_t znak, licznik, dl_kom, flaga_stopniowanie,
 bufor_PWM1,bufor_PWM2,bufor_PWM3,licznik_stopniowania;
-uint8_t bufor[15];
+uint8_t bufor[60];
 uint8_t zparsowany[3], sukces, zparsowany1, zparsowany2, zparsowany3;
 uint8_t R,G,B,i,j;
 unsigned int _licznik_10ms, _10ms_go;
@@ -177,6 +177,7 @@ int main(void)
   HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_2);
   HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_3);
   HAL_UART_Receive_IT(&huart2, &znak, 1);
+  // initialize dark blue when turned on
   htim1.Instance->CCR1 = 100; // B
   htim1.Instance->CCR2 = 30; // G
   htim1.Instance->CCR3 = 10; // R
@@ -189,12 +190,6 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-	  if(flaga==1)
-	  {
-		  bufor[licznik]=znak;
-		  licznik++;
-		  flaga=0;
-	  }
 	  if((bufor[licznik-1] == '\n')&&(licznik != 14))
 	  {
 		  licznik = 0;
@@ -261,9 +256,6 @@ int main(void)
 		  	  	  	  	  	  		  _licznik_10ms = 0;
 		  	  	  	  	  	  	  }
 		  	  	  	  	  	  }
-		  	  	  	  	 // in event of next frame being admitted while stepping
-		  	  	  	  	 	 znak = 0;
-		  	  	  			 flaga = 0;
 
 	  }else if(sukces == 2)
 	  {
@@ -275,7 +267,6 @@ int main(void)
 			  bufor[i] = 0;
 		  }
 		  znak = 0;
-		  flaga = 0;
 	  }
 
 
@@ -325,7 +316,9 @@ void SystemClock_Config(void)
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
 	if(huart->Instance == USART2){
-		flaga=1;
+		//flaga=1;
+		bufor[licznik]=znak;
+		licznik++;
 		HAL_UART_Receive_IT(&huart2, &znak, 1);
 	}
 }
